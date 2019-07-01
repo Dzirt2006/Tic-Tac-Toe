@@ -1,50 +1,118 @@
 #include <iostream>
+#include <stdio.h>
+#include <cstdlib>
+
+#include <chrono>//sleep
+#include <thread>//sleep
+
+
 using namespace std;
-void OutputInArr();
+
+
+const int row =3;
+const int column = 10;
+
+//prototypes
+void  Start();
+void coutArr(char [][column]); //! C++ requires that we specify the number of columns in the function definition
+void ClearTable(char [][column]);
+int CheckXOFirst(char);
+void GameOver();
+
 int main() {
-    OutputInArr();
+    Start();
 
     return 0;
 }
 
-void OutputInArr() {
-    const int row =4;
-    const int column = 10;
+
+
+
+void Start() {
+
+    //Fill up the array by empty cells
     char arr[row][column];
-    for (int i=0;i<row;i++){
-        for(int j=0;j<column;j++){
-            arr[i][j]=' ',' ';
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < column; j++) {
+            arr[i][j] = ' ', ' ';
         }
     }
+    ClearTable(arr);//print empty gamefield
 
+    //this loop is cycling the game before all fields don't filled up
+     for (int i = 1; i < row; i++) { //!start from second arr index,because user doesnt want to enter 0.0!   DOESNT WORK
+        for (int j = 1; j < column; j++) {
+            if(arr[i][j] = ' ',' '){
+                coutArr(arr);}
+            else
+                GameOver();
+        }
+    }
+}
 
-    cout<<arr[1][1]<<" | "<<arr[1][2]<<" | "<<arr[1][3]<<endl;
-    cout<<"- | - | -"<<endl;
-    cout<<arr[2][1]<<" | "<<arr[2][2]<<" | "<<arr[2][3]<<endl;
-    cout<<"- | - | -"<<endl;
-    cout<<arr[3][1]<<" | "<<arr[3][2]<<" | "<<arr[3][3]<<endl;
-
-
-    int rowIn,columnIn;
+void coutArr(char arr[][column]){
+    //block of local variables
+    int rowIn,columnIn,checkIn;
     char in;
-    cout<<"Enter pozition: "<<endl;
-    cin>>rowIn>>columnIn>>in;
-    arr[rowIn][columnIn]=in,in;
+
+    //start to input numbers
+    cout<<"Enter pozition(row*space*column): ";
+    cin>>rowIn>>columnIn;
+    cout<<'\n'<<"Now enter X or O(lowercase...I'll check!): ";
+    cin>>in;
+
+    //Check input values.
+    checkIn=CheckXOFirst(in);
+    switch(checkIn){
+        case 1:
+        system("cls");
+        cout << endl;
+        arr[rowIn][columnIn] = in, in;
+            ClearTable(arr);
+        break;
+        case 2:
+            system("cls");
+            cout<<"\n \n \n \n \n I told you...";
+            this_thread::sleep_for(chrono::seconds(2));//w8 2 sec
+            GameOver();
+        default:
+            cout<<"Wrong input.Try again.";
+            break;
+    }
+
+}
+
+
+//This function check input value
+int CheckXOFirst(char a){
+    if(a=='x' || a=='o'){
+        return 1;
+    }else if(a=='X'||a=='O'){
+        return 2;
+    }else{
+        return 0;
+    }
+}
+
+void GameOver(){
+    system("cls");
+    cout<<" .d8888b.                                  .d88888b.                         "<<endl;
+    cout<<"d88P  Y88b                                d88P    Y88b                      "<<endl;
+    cout<<"888    888                                888     888      "<<endl;
+    cout<<"888        8888b. 88888b.d88b.  .d88b.    888     888888  888 .d88b. 888d888"<<endl;
+    cout<<"888  88888    88b888   888  88bd8P  Y8b   888     888888  888d8P  Y8b888P\""<<endl;
+    cout<<"888    888.d888888888  888  88888888888   888     888Y88  88P88888888888 "<<endl;
+    cout<<"Y88b  d88P888  888888  888  888Y8b.       Y88b. .d88P Y8bd8P Y8b.    888"<<endl;
+    cout<<" Y8888P88  Y888888888  888  888  Y8888       Y88888P   Y88P   Y8888 888"<<endl;
+    exit(0);
+}
+
+void ClearTable(char arr[][column]){
+    cout<<endl;
     cout<<arr[1][1]<<" | "<<arr[1][2]<<" | "<<arr[1][3]<<endl;
     cout<<"- | - | -"<<endl;
     cout<<arr[2][1]<<" | "<<arr[2][2]<<" | "<<arr[2][3]<<endl;
     cout<<"- | - | -"<<endl;
     cout<<arr[3][1]<<" | "<<arr[3][2]<<" | "<<arr[3][3]<<endl;
-
-
-
-    cout<<"Enter pozition: "<<endl;
-    cin>>rowIn>>columnIn>>in;
-    arr[rowIn][columnIn]=in,in;
-    cout<<arr[1][1]<<" | "<<arr[1][2]<<" | "<<arr[1][3]<<endl;
-    cout<<"- | - | -"<<endl;
-    cout<<arr[2][1]<<" | "<<arr[2][2]<<" | "<<arr[2][3]<<endl;
-    cout<<"- | - | -"<<endl;
-    cout<<arr[3][1]<<" | "<<arr[3][2]<<" | "<<arr[3][3]<<endl;
-
+    cout<<endl;
 }
