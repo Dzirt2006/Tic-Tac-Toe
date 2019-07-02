@@ -34,49 +34,54 @@ void Start() {
     char arr[row][column];
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < column; j++) {
-            arr[i][j] = ' ', ' ';
+            arr[i][j] = ' ';
         }
     }
     ClearTable(arr);//print empty gamefield
 
     //this loop is cycling the game before all fields don't filled up
-     for (int i = 1; i < row; i++) { //!start from second arr index,because user doesnt want to enter 0.0!   DOESNT WORK
-        for (int j = 1; j < column; j++) {
-            if(arr[i][j] = ' ',' '){
-                coutArr(arr);}
-            else
-                GameOver();
-        }
+     for (int i = 1; i < 9; i++) { //!start
+        coutArr(arr);
+     }
+
     }
-}
+
 
 void coutArr(char arr[][column]){
     //block of local variables
     int rowIn,columnIn,checkIn;
-    char in;
-
+    char in=' ';// empty space for checking sequence
     //start to input numbers
-    cout<<"Enter pozition(row*space*column): ";
+    cout<<"Enter pozition(row /*space*/ column): ";
     cin>>rowIn>>columnIn;
     cout<<'\n'<<"Now enter X or O(lowercase...I'll check!): ";
     cin>>in;
-
+        if (in==in){}
     //Check input values.
     checkIn=CheckXOFirst(in);
     switch(checkIn){
-        case 1:
+        case 0: //compliance sequence
+            system("cls");
+            cout<<in<<" moved before,it's not your time!";
+            break;
+        case 1: // regular game time
         system("cls");
         cout << endl;
         arr[rowIn][columnIn] = in, in;
             ClearTable(arr);
         break;
-        case 2:
+        case 2: //Secret case...
             system("cls");
             cout<<"\n \n \n \n \n I told you...";
             this_thread::sleep_for(chrono::seconds(2));//w8 2 sec
             GameOver();
-        default:
+            break;
+        default: // Wrong input
+            cout << endl;
+            cout << endl;
             cout<<"Wrong input.Try again.";
+            this_thread::sleep_for(chrono::seconds(2));//w8 2 sec
+            system("cls");
             break;
     }
 
@@ -85,12 +90,20 @@ void coutArr(char arr[][column]){
 
 //This function check input value
 int CheckXOFirst(char a){
+    static char sequence=' ';
+    cout<<'_'<<sequence<<'_';
     if(a=='x' || a=='o'){
+        //sequence check
+        if(sequence==a){  // if x,moving again gonna be error
+            return 0;
+        }else
+            sequence=a;
+        cout<<'_'<<sequence<<'_';
         return 1;
     }else if(a=='X'||a=='O'){
         return 2;
     }else{
-        return 0;
+        return 3;
     }
 }
 
